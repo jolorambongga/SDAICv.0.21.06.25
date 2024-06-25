@@ -354,7 +354,7 @@ include_once('header.php');
             console.log("THE RESPONSE:", response);
 
             var doctorSelect = $('#doctor');
-            doctorSelect.empty(); // Clear existing options
+            doctorSelect.empty()
             doctorSelect.append('<option selected>Select Doctor...</option>');
 
             response.data.forEach(function (doc) {
@@ -546,18 +546,21 @@ include_once('header.php');
             $('#e_bodySched').empty();
             editScheduleList = [];
 
-            response.data.forEach(function(schedule) {
+            response.data.forEach(function(data) {
+
+              const schedule = data.doctor_id ? data.doctor_sched : data.service_sched;
+
               const sched_data = `
               <div class="input-group mx-auto w-100 schedule-item">
 
               <span class="input-group-text text-warning">Selected Day:</span>
-              <span class="input-group-text bg-warning-subtle">${schedule.avail_date}</span>
+              <span class="input-group-text bg-warning-subtle">${schedule.day_of_week}</span>
 
               <span class="input-group-text text-success">Start Time:</span>
-              <span class="input-group-text bg-success-subtle">${schedule.avail_start_time}</span>
+              <span class="input-group-text bg-success-subtle">${schedule.start_time}</span>
 
               <span class="input-group-text text-danger">End Time:</span>
-              <span class="input-group-text bg-danger-subtle">${schedule.avail_end_time}</span>
+              <span class="input-group-text bg-danger-subtle">${schedule.end_time}</span>
 
               <button class="btn btn-danger text-warning remove-sched" type="button" id="removeSched">-</button>
 
@@ -566,12 +569,13 @@ include_once('header.php');
               $('#e_bodySched').append(sched_data);
 
               editScheduleList.push({
-                avail_day: schedule.avail_date,
-                avail_start_time: schedule.avail_start_time,
-                avail_end_time: schedule.avail_end_time
+                day_of_week: schedule.day_of_week,
+                start_time: schedule.start_time,
+                end_time: schedule.end_time
               });
 
             });
+
             $('#e_service_name').val(response.data[0].service_name);
             $('#e_description').val(response.data[0].description);
             $('#e_duration').val(response.data[0].duration);
@@ -585,13 +589,13 @@ include_once('header.php');
               url: 'handles/services/get_doctor_option.php',
               method: 'GET',
               dataType: 'json',
-              success: function(doctorResponse) {
-                console.log("THE RESPONSE:", doctorResponse);
+              success: function(response) {
+                console.log("THE RESPONSE:", response);
 
                 var doctorSelect = $('#e_doctor');
                     doctorSelect.empty(); // Clear existing options
 
-                    doctorResponse.data.forEach(function(doc) {
+                    response.data.forEach(function(doc) {
                       const option = `
                       <option data-doctor-id="${doc.doctor_id}" value="${doc.doctor_id}">
                       Dr. ${doc.full_name}
@@ -615,7 +619,7 @@ include_once('header.php');
         })
       });
 
-      $('#e_callSetSched').click(function () {
+      $(document).on('click', '#e_callSetSched', function () {
         new bootstrap.Modal($('#mod_editServSched')).show();
       });
 

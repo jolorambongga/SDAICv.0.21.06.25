@@ -7,7 +7,7 @@ try {
 	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 
-	$sql = "SELECT doctor_id,
+	$sql = "SELECT doctor_id, contact, 
 			CONCAT(first_name, ' ', COALESCE(middle_name, ' '), ' ', last_name) AS full_name
 			FROM tbl_Doctors;";
 
@@ -24,9 +24,9 @@ try {
 
 	header('Content-Type: application/json');
 
-	echo json_encode(array("status" => "success", "process" => "service: get doctor", "data" => $doctors));
+	echo json_encode(array("status" => "success", "process" => "get_doctor", "data" => $doctors));
 
 
 } catch (PDOException $e) {
-	echo json_encode(["status" => "error", "message" => $e->getMessage(), "report" => "catch reached"]);
+	echo json_encode(array("status" => "error", "message" => $e->getMessage(), "report" => "catch_reached", "process" => "get_doctor"));
 }
