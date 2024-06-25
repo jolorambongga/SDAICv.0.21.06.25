@@ -250,6 +250,7 @@ include_once('header.php');
         $('#set_sched').append(doctor_sched);
 
         $('#switch_sched').on('change', function() {
+          populateDoctorOptions();
           if ($('#switch_sched').is(':checked')) {
             $('#set_sched').empty();
             $('#set_sched').append(doctor_sched);
@@ -270,7 +271,7 @@ include_once('header.php');
         var doctor_sched = `<label class="form-label">Choose Doctor</label>
         <div class="input-group mb-3">
         <label class="input-group-text bg-warning-" for="doctor">Options</label>
-        <select class="form-select" id="doctor">
+        <select class="form-select" id="e_doctor">
         <option selected>Select Doctor...</option>
         <option value="1">Doctor 1</option>
         <option value="2">Doctor 2</option>
@@ -282,6 +283,7 @@ include_once('header.php');
         $('#e_set_sched').append(doctor_sched);
 
         $('#e_switch_sched').on('change', function() {
+          populateDoctorOptions();
           if ($('#e_switch_sched').is(':checked')) {
             $('#e_set_sched').empty();
             $('#e_set_sched').append(doctor_sched);
@@ -352,16 +354,23 @@ include_once('header.php');
           success: function(response) {
 
             console.log("THE RESPONSE:", response);
+            //CREATE
+            var doctor_select = $('#doctor');
+            doctor_select.empty()
+            doctor_select.append('<option selected>Select Doctor...</option>');
 
-            var doctorSelect = $('#doctor');
-            doctorSelect.empty()
-            doctorSelect.append('<option selected>Select Doctor...</option>');
+            //EDIT
+            var e_doctor_select = $('#e_doctor');
+            e_doctor_select.empty();
+            e_doctor_select.append('<option selected>Select Doctor...</option>');
 
             response.data.forEach(function (doc) {
+
               const data = `
               <option data-doctor-id="${doc.doctor_id}" value="${doc.doctor_id}">Dr. ${doc.full_name}</option>`
 
-              doctorSelect.append(data);
+              doctor_select.append(data);
+              e_doctor_select.append(data);
 
             });
           },
@@ -574,16 +583,29 @@ include_once('header.php');
                 end_time: schedule.end_time
               });
 
+              console.log(editScheduleList);
+
             });
 
             $('#e_service_name').val(response.data[0].service_name);
             $('#e_description').val(response.data[0].description);
             $('#e_duration').val(response.data[0].duration);
+            $('#e_max').val(response.data[0].max);
             $('#e_cost').val(response.data[0].cost);
-            $('#e_avail_day').val(response.data[0].avail_day);
-            $('#e_avail_start_time').val(response.data[0].avail_start_time);
-            $('#e_avail_end_time').val(response.data[0].avail_end_time);
+
+
+
+            $('#e_day_of_week').val(response.data[0].day_of_week);
+            $('#e_start_time').val(response.data[0].start_time);
+            $('#e_end_time').val(response.data[0].end_time);
+
             $('#e_doctor').val(doctor_id);
+
+            if (doctor_id) {
+                $('#e_switch_sched').prop('checked', true).change();
+            } else {
+                $('#e_switch_sched').prop('checked', false).change();
+            }
 
             $.ajax({
               url: 'handles/services/get_doctor_option.php',
@@ -592,19 +614,19 @@ include_once('header.php');
               success: function(response) {
                 console.log("THE RESPONSE:", response);
 
-                var doctorSelect = $('#e_doctor');
-                    doctorSelect.empty(); // Clear existing options
+                var e_doctor_select = $('#e_doctor');
+                    e_doctor_select.empty(); // Clear existing options
 
                     response.data.forEach(function(doc) {
                       const option = `
                       <option data-doctor-id="${doc.doctor_id}" value="${doc.doctor_id}">
                       Dr. ${doc.full_name}
                       </option>`;
-                      doctorSelect.append(option);
+                      e_doctor_select.append(option);
                     });
 
                     // Set the selected doctor based on the doctor_id
-                    doctorSelect.val(doctor_id);
+                    e_doctor_select.val(doctor_id);
 
                     console.log("SELECTED DOCTOR ID", doctor_id);
                   },
@@ -625,11 +647,11 @@ include_once('header.php');
 
       // SAVE EDITED SCHEDULE
       $('#e_addSched').click(function () {
-        var avail_day = $('#e_avail_day').val();
-        var avail_start_time = $('#e_avail_start_time').val();
-        var avail_end_time = $('#e_avail_end_time').val();
+        var day_of_week = $('#e_day_of_week').val();
+        var start_time = $('#e_start_time').val();
+        var end_time = $('#e_end_time').val();
 
-        if (!avail_day || !avail_start_time || !avail_end_time) {
+        if (!day_of_week || !start_time || !end_time) {
           alert('Please complete the schedule details.');
           return;
         }
@@ -638,13 +660,13 @@ include_once('header.php');
         <div class="input-group mx-auto w-100 schedule-item">
 
         <span class="input-group-text text-warning">Selected Day:</span>
-        <span class="input-group-text bg-warning-subtle">${avail_day}</span>
+        <span class="input-group-text bg-warning-subtle">${day_of_week}</span>
 
         <span class="input-group-text text-success">Start Time:</span>
-        <span class="input-group-text bg-success-subtle">${avail_start_time}</span>
+        <span class="input-group-text bg-success-subtle">${start_time}</span>
 
         <span class="input-group-text text-danger">End Time:</span>
-        <span class="input-group-text bg-danger-subtle">${avail_end_time}</span>
+        <span class="input-group-text bg-danger-subtle">${end_time}</span>
 
         <button class="btn btn-danger text-warning remove-sched" type="button" id="removeSched">-</button>
 
@@ -654,9 +676,9 @@ include_once('header.php');
         $('#e_bodySched').append(sched_data);
 
         editScheduleList.push({
-          avail_day: avail_day,
-          avail_start_time: avail_start_time,
-          avail_end_time: avail_end_time
+          day_of_week: day_of_week,
+          start_time: start_time,
+          end_time: end_time
         });
 
         console.log(editScheduleList);
