@@ -8,7 +8,7 @@
       </div>
       <div class="modal-body">
 
-        <input type="hidden" id="avail_dates" name="avail_dates">
+        <input type="hidden" id="service_sched" name="service_sched">
 
         <pre></pre>
 
@@ -16,8 +16,8 @@
         <!-- input group -->
         <div class="input-group mb-3">
 
-          <label class="input-group-text bg-warning-subtle" for="avail_day">Select Day</label>
-          <select class="form-select" id="avail_day">
+          <label class="input-group-text bg-warning-subtle" for="day_of_week">Select Day</label>
+          <select class="form-select" id="day_of_week">
             <option selected></option>
             <option>Sunday</option>
             <option>Monday</option>
@@ -29,41 +29,72 @@
           </select>
 
 
-          <!-- sun start time -->
-          <label class="input-group-text bg-success-subtle" for="avail_start_time">Start Time</label>
-          <select class="form-select" id="avail_start_time">
+          <!-- start time -->
+          <label class="input-group-text bg-success-subtle" for="start_time">Start Time</label>
+          <select class="form-select" id="start_time">
             <option selected></option>
             <optgroup label="AM">                    
-              <option value="9:00">9:00 AM</option>
-              <option value="10:00">10:00 AM</option>
-              <option value="11:00">11:00 AM</option>
+              <option value="24:00:00">12:00 AM</option>
+              <option value="01:00:00">1:00 AM</option>
+              <option value="02:00:00">2:00 AM</option>
+              <option value="03:00:00">3:00 AM</option>
+              <option value="04:00:00">4:00 AM</option>
+              <option value="05:00:00">5:00 AM</option>
+              <option value="06:00:00">6:00 AM</option>
+              <option value="07:00:00">7:00 AM</option>
+              <option value="08:00:00">8:00 AM</option>
+              <option value="09:00:00">9:00 AM</option>
+              <option value="10:00:00">10:00 AM</option>
+              <option value="11:00:00">11:00 AM</option>
             </optgroup>
+            <option selected></option>
             <optgroup label="PM">
-              <option value="12:00">12:00 PM</option>
-              <option value="13:00">1:00 PM</option>
-              <option value="14:00">2:00 PM</option>
-              <option value="15:00">3:00 PM</option>
-              <option value="16:00">4:00 PM</option>
-              <option value="17:00">5:00 PM</option>
+              <option value="12:00:00">12:00 PM</option>
+              <option value="13:00:00">1:00 PM</option>
+              <option value="14:00:00">2:00 PM</option>
+              <option value="15:00:00">3:00 PM</option>
+              <option value="16:00:00">4:00 PM</option>
+              <option value="17:00:00">5:00 PM</option>
+              <option value="18:00:00">6:00 PM</option>
+              <option value="19:00:00">7:00 PM</option>
+              <option value="20:00:00">8:00 PM</option>
+              <option value="21:00:00">9:00 PM</option>
+              <option value="22:00:00">10:00 PM</option>
+              <option value="23:00:00">11:00 PM</option>
             </optgroup>
           </select>
-          <!-- sun end time -->
-          <label class="input-group-text bg-danger-subtle" for="avail_end_time">End Time</label>
-          <select class="form-select" id="avail_end_time">
+          <!-- end time -->
+          <label class="input-group-text bg-danger-subtle" for="end_time">End Time</label>
+          <select class="form-select" id="end_time">
             <option selected></option>
-            <optgroup label="AM">
-              <option value="9:00">9:00 AM</option>
-              <option value="10:00">10:00 AM</option>
-              <option value="11:00">11:00 AM</option>
+            <optgroup label="AM">                    
+              <option value="24:00:00">12:00 AM</option>
+              <option value="01:00:00">1:00 AM</option>
+              <option value="02:00:00">2:00 AM</option>
+              <option value="03:00:00">3:00 AM</option>
+              <option value="04:00:00">4:00 AM</option>
+              <option value="05:00:00">5:00 AM</option>
+              <option value="06:00:00">6:00 AM</option>
+              <option value="07:00:00">7:00 AM</option>
+              <option value="08:00:00">8:00 AM</option>
+              <option value="09:00:00">9:00 AM</option>
+              <option value="10:00:00">10:00 AM</option>
+              <option value="11:00:00">11:00 AM</option>
             </optgroup>
+            <option selected></option>
             <optgroup label="PM">
-              <option value="12:00">12:00 PM</option>
-              <option value="13:00">1:00 PM</option>
-              <option value="14:00">2:00 PM</option>
-              <option value="15:00">3:00 PM</option>
-              <option value="16:00">4:00 PM</option>
-              <option value="17:00">5:00 PM</option>
-              <option value="18:00">6:00 PM</option>
+              <option value="12:00:00">12:00 PM</option>
+              <option value="13:00:00">1:00 PM</option>
+              <option value="14:00:00">2:00 PM</option>
+              <option value="15:00:00">3:00 PM</option>
+              <option value="16:00:00">4:00 PM</option>
+              <option value="17:00:00">5:00 PM</option>
+              <option value="18:00:00">6:00 PM</option>
+              <option value="19:00:00">7:00 PM</option>
+              <option value="20:00:00">8:00 PM</option>
+              <option value="21:00:00">9:00 PM</option>
+              <option value="22:00:00">10:00 PM</option>
+              <option value="23:00:00">11:00 PM</option>
             </optgroup>
           </select>
 

@@ -231,15 +231,15 @@ include_once('header.php');
 
       $(document).ready(function() {        
         var doctor_sched = `<label class="form-label">Choose Doctor</label>
-                <div class="input-group mb-3">
-                  <label class="input-group-text bg-warning-" for="doctor">Options</label>
-                  <select class="form-select" id="doctor">
-                    <option selected>Select Doctor...</option>
-                    <option value="1">Doctor 1</option>
-                    <option value="2">Doctor 2</option>
-                    <option value="3">Doctor 3</option>
-                  </select>
-                </div>`;
+        <div class="input-group mb-3">
+        <label class="input-group-text bg-warning-" for="doctor">Options</label>
+        <select class="form-select" id="doctor">
+        <option selected>Select Doctor...</option>
+        <option value="1">Doctor 1</option>
+        <option value="2">Doctor 2</option>
+        <option value="3">Doctor 3</option>
+        </select>
+        </div>`;
 
         var service_sched = `<button id="callSetSched" type="button" class="btn btn-warning w-100">Set Schedule</button><pre></pre>`;
         $('#set_sched').append(doctor_sched);
@@ -358,11 +358,11 @@ include_once('header.php');
       // ADD SCHEDULE
       $('#addSched').click(function () {
 
-        var avail_day = $('#avail_day').val();
-        var avail_start_time = $('#avail_start_time').val();
-        var avail_end_time = $('#avail_end_time').val();
+        var day_of_week = $('#day_of_week').val();
+        var start_time = $('#start_time').val();
+        var end_time = $('#end_time').val();
         
-        if (!avail_day || !avail_start_time || !avail_end_time) {
+        if (!day_of_week || !start_time || !end_time) {
           alert('Please complete the schedule details.');
           return;
         }
@@ -372,13 +372,13 @@ include_once('header.php');
         <div class="input-group mx-auto w-100 schedule-item">
 
         <span class="input-group-text text-warning">Selected Day:</span>
-        <span class="input-group-text bg-warning-subtle">${avail_day}</span>
+        <span class="input-group-text bg-warning-subtle">${day_of_week}</span>
 
         <span class="input-group-text text-success">Start Time:</span>
-        <span class="input-group-text bg-success-subtle">${avail_start_time}</span>
+        <span class="input-group-text bg-success-subtle">${start_time}</span>
 
         <span class="input-group-text text-danger">End Time:</span>
-        <span class="input-group-text bg-danger-subtle">${avail_end_time}</span>
+        <span class="input-group-text bg-danger-subtle">${end_time}</span>
 
         <button class="btn btn-danger text-warning remove-sched" type="button" id="removeSched">-</button>
 
@@ -388,9 +388,9 @@ include_once('header.php');
         $('#bodySched').append(sched_data);
 
         scheduleList.push({
-          avail_day: avail_day,
-          avail_start_time: avail_start_time,
-          avail_end_time: avail_end_time
+          day_of_week: day_of_week,
+          start_time: start_time,
+          end_time: end_time
         });
 
         console.log(scheduleList);
@@ -423,10 +423,10 @@ include_once('header.php');
           $(this).prop('selectedIndex', 0);
         });
 
-        var avail_dates = JSON.stringify(scheduleList);
-        $('#avail_dates').val(avail_dates);
+        var service_sched = JSON.stringify(scheduleList);
+        $('#service_sched').val(service_sched);
 
-        console.log('Saved Schedules:', avail_dates);
+        console.log('Saved Schedules:', service_sched);
 
       });
 
@@ -435,30 +435,38 @@ include_once('header.php');
 
         e.preventDefault();
 
+        var doc_sched = $('#doc_sched').val();
+
         var service_name = $('#service_name').val();
         var description = $('#description').val();
         var duration = $('#duration').val();
+        var max = $('#max').val();
         var cost = $('#cost').val();
-        var avail_dates = $('#avail_dates').val();
+        var service_sched = $('#service_sched').val();
         var doctor_id = $('#doctor').find(':selected').data('doctor-id');
 
-        if (!avail_dates || avail_dates === '[]') {
-          alert('Please Select a Schedule...');
-          return;
+        if(doc_sched === "false") {
+          if (!service_sched || service_sched === '[]') {
+            alert('Please Select a Schedule...');
+            return;
+          }
         }
 
-        if(!doctor_id) {
-          alert("Please Select a Doctor...");
-          return;
+        if(doc_sched === "true") {
+          if(!doctor_id) {
+            alert("Please Select a Doctor...");
+            return;
+          }
         }
 
         var service_data = {
           service_name: service_name,
           description: description,
           duration: duration,
+          max: max,
           cost: cost,
           doctor_id: doctor_id,
-          avail_dates: avail_dates
+          service_sched: service_sched
         }
 
         console.log('click submit', service_data);
