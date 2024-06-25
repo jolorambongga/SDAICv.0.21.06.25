@@ -147,21 +147,38 @@ include_once('header.php');
                 <input type="text" id="e_service_name" class="form-control" required>
                 <pre></pre>
                 <!-- end service name -->
+
                 <!-- start service description -->
                 <label for="e_description" class="form-label">Service Description</label>
                 <textarea type="text" id="e_description" class="form-control" required></textarea>
                 <pre></pre>
                 <!-- end service description -->
                 
-                <!-- start doctor sched -->
-                <button id="e_callSetSched" type="button" class="btn btn-warning w-100">Set Schedule</button><pre></pre>
-                <!-- end doctor sched -->
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" role="switch" id="e_switch_sched" checked>
+                  <label class="form-check-label" for="e_switch_sched">Use doctor sched</label>
+                </div>
+                <pre></pre>
+
+                <input type="hidden" id="e_doc_sched" name="e_doc_sched"/>
+
+
+                <span id="e_set_sched">
+
+                </span>
 
                 <!-- service duration -->
                 <label for="e_duration" class="form-label">Service Duration</label>
                 <input type="number" id="e_duration" class="form-control" required>
                 <pre></pre>
                 <!-- end service duration -->
+
+                <!-- service max -->
+                <label for="e_max" class="form-label">Service Max</label>
+                <input type="number" id="e_max" class="form-control" required>
+                <pre></pre>
+                <!-- end service max -->
+
                 <!-- service cost -->
                 <label for="e_cost" class="form-label">Service Cost</label>
                 <div class="input-group mb-3">
@@ -170,18 +187,6 @@ include_once('header.php');
                   <span class="input-group-text bg-warning-">.00</span>
                 </div>
                 <!-- end service cost -->
-                <!-- service doctor -->
-                <label class="form-label">Choose Doctor</label>
-                <div class="input-group mb-3">
-                  <label class="input-group-text bg-warning-" for="e_doctor">Options</label>
-                  <select class="form-select" id="e_doctor">
-                    <option selected>Select Doctor...</option>
-                    <option value="1">Doctor 1</option>
-                    <option value="2">Doctor 2</option>
-                    <option value="3">Doctor 3</option>
-                  </select>
-                </div>
-                <!-- end service doctor -->
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
@@ -260,6 +265,38 @@ include_once('header.php');
         });
       });
 
+      // EDIT SWITCH
+      $(document).ready(function() {        
+        var doctor_sched = `<label class="form-label">Choose Doctor</label>
+        <div class="input-group mb-3">
+        <label class="input-group-text bg-warning-" for="doctor">Options</label>
+        <select class="form-select" id="doctor">
+        <option selected>Select Doctor...</option>
+        <option value="1">Doctor 1</option>
+        <option value="2">Doctor 2</option>
+        <option value="3">Doctor 3</option>
+        </select>
+        </div>`;
+
+        var service_sched = `<button id="e_callSetSched" type="button" class="btn btn-warning w-100">Set Schedule</button><pre></pre>`;
+        $('#e_set_sched').append(doctor_sched);
+
+        $('#e_switch_sched').on('change', function() {
+          if ($('#e_switch_sched').is(':checked')) {
+            $('#e_set_sched').empty();
+            $('#e_set_sched').append(doctor_sched);
+            $('#e_doc_sched').val("true");
+            var sched_type = $('#e_doc_sched').val();
+          } else {
+            $('#e_set_sched').empty();
+            $('#e_set_sched ').append(service_sched);
+            $('#e_doc_sched').val("false");
+            var sched_type = $('#e_doc_sched').val();
+          }
+          console.log(sched_type);
+        });
+      });
+
       loadServices();
 
       var scheduleList = [];
@@ -267,45 +304,44 @@ include_once('header.php');
 
       // READ SERVICES
       function loadServices() {
-        $.ajax({
+      $.ajax({
           type: 'GET',
           url: 'handles/services/read_services.php',
           dataType: 'JSON',
           success: function(response) {
-            console.log("SUCCESS READ:", response);
-            $('#tbodyServices').empty();
+              console.log("SUCCESS READ:", response);
+              $('#tbodyServices').empty();
 
-            response.data.forEach(function(data) {
+              response.data.forEach(function(data) {
 
-              const datesWithNewLines = data.concat_date ? data.concat_date.replace(/,/g, '<hr>') : '';
-              const timesWithNewLines = data.concat_time ? data.concat_time.replace(/,/g, '<hr>') : '';
+                  const schedule = data.doctor_id ? data.doctor_sched : data.service_sched;
 
-              const read_service_html = `
-              <tr>
-              <th scope="row"><small>${data.service_id}</small></th>
-              <td><small>${data.service_name}</small></td>
-              <td><small>${data.description}</small></td>
-              <td><small>${datesWithNewLines}</small></td>
-              <td><small>${timesWithNewLines}</small></td>
-              <td><small>${data.duration}</small></td>
-              <td><small>${data.cost}</small></td>
-              <td><small>${data.full_name}</small></td>
-              <td data-service-id='${data.service_id}' data-doctor-id='${data.doctor_id}' data-service-name='${data.service_name}'>
-              <div class="d-grid gap-2 d-md-flex justify-content-md-end text-center">
-              <button id='callEdit' type='button' class='btn btn-mymedium btn-sm' data-bs-toggle='modal' data-bs-target='#mod_editServ'><i class="fas fa-edit"></i></button>
-              <button id='callDelete' type='button' class='btn btn-myshadow btn-sm' data-bs-toggle='modal' data-bs-target='#mod_delServ'><i class="fas fa-trash"></i></button>
-              </div>
-              </td>
-              </tr>
-              `;
-              $('#tbodyServices').append(read_service_html);
-            }); // END EACH FUNCTION
+                  const read_service_html = `
+                  <tr>
+                  <th scope="row"><small>${data.service_id}</small></th>
+                  <td><small>${data.service_name}</small></td>
+                  <td><small>${data.description}</small></td>
+                  <td><small>${data.full_name}</small></td>
+                  <td><small>${schedule}</small></td>
+                  <td><small>${data.duration}</small></td>
+                  <td><small>${data.max}</small></td>
+                  <td><small>${data.cost}</small></td>
+                  <td data-service-id='${data.service_id}' data-doctor-id='${data.doctor_id}' data-service-name='${data.service_name}'>
+                  <div class="d-grid gap-2 d-md-flex justify-content-md-end text-center">
+                  <button id='callEdit' type='button' class='btn btn-mymedium btn-sm' data-bs-toggle='modal' data-bs-target='#mod_editServ'><i class="fas fa-edit"></i></button>
+                  <button id='callDelete' type='button' class='btn btn-myshadow btn-sm' data-bs-toggle='modal' data-bs-target='#mod_delServ'><i class="fas fa-trash"></i></button>
+                  </div>
+                  </td>
+                  </tr>
+                  `;
+                  $('#tbodyServices').append(read_service_html);
+              }); // END EACH FUNCTION
           },
           error: function(error) {
-            console.log("ERROR READ:", error);
+              console.log("ERROR READ:", error);
           }
-        });
-      }
+      });
+    }
 
       // READ DOCTORS
       function populateDoctorOptions() {
