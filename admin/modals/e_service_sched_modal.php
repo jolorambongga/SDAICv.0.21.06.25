@@ -8,7 +8,7 @@
       </div>
       <div class="modal-body">
 
-        <input type="hidden" id="e_avail_dates" name="e_avail_dates">
+        <input type="hidden" id="e_service_schedule" name="e_service_schedule">
         <input type="hidden" id="e_service_id" name="e_service_id">
 
         <pre></pre>
@@ -17,8 +17,8 @@
         <!-- input group -->
         <div class="input-group mb-3">
 
-          <label class="input-group-text bg-warning-subtle" for="e_avail_day">Select Day</label>
-          <select class="form-select" id="e_avail_day">
+          <label class="input-group-text bg-warning-subtle" for="e_day_of_week">Select Day</label>
+          <select class="form-select" id="e_day_of_week">
             <option selected></option>
             <option>Sunday</option>
             <option>Monday</option>
@@ -31,8 +31,8 @@
 
 
           <!-- start time -->
-          <label class="input-group-text bg-success-subtle" for="e_avail_start_time">Start Time</label>
-          <select class="form-select" id="e_avail_start_time">
+          <label class="input-group-text bg-success-subtle" for="e_start_time">Start Time</label>
+          <select class="form-select" id="e_start_time">
             <option selected></option>
             <optgroup label="AM">                    
               <option value="24:00:00">12:00 AM</option>
@@ -65,8 +65,8 @@
             </optgroup>
           </select>
           <!-- end time -->
-          <label class="input-group-text bg-danger-subtle" for="e_avail_end_time">End Time</label>
-          <select class="form-select" id="e_avail_end_time">
+          <label class="input-group-text bg-danger-subtle" for="e_end_time">End Time</label>
+          <select class="form-select" id="e_end_time">
             <option selected></option>
             <optgroup label="AM">                    
               <option value="24:00:00">12:00 AM</option>

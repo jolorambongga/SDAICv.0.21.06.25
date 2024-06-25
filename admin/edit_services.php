@@ -294,6 +294,7 @@ include_once('header.php');
             $('#e_set_sched ').append(service_sched);
             $('#e_doc_sched').val("false");
             var sched_type = $('#e_doc_sched').val();
+            // displaySchedule();
           }
           console.log(sched_type);
         });
@@ -557,7 +558,9 @@ include_once('header.php');
 
             response.data.forEach(function(data) {
 
-              const schedule = data.doctor_id ? data.doctor_sched : data.service_sched;
+              const schedule_list = data.doctor_id ? data.doctor_sched : data.service_sched;
+
+              const schedule = schedule_list[0];
 
               const sched_data = `
               <div class="input-group mx-auto w-100 schedule-item">
@@ -583,7 +586,8 @@ include_once('header.php');
                 end_time: schedule.end_time
               });
 
-              console.log(editScheduleList);
+              console.log("EDIT SCHEDULE LIST", editScheduleList);
+              console.log("SCHEDULE", schedule);
 
             });
 
@@ -593,19 +597,19 @@ include_once('header.php');
             $('#e_max').val(response.data[0].max);
             $('#e_cost').val(response.data[0].cost);
 
-
-
-            $('#e_day_of_week').val(response.data[0].day_of_week);
-            $('#e_start_time').val(response.data[0].start_time);
-            $('#e_end_time').val(response.data[0].end_time);
-
-            $('#e_doctor').val(doctor_id);
-
             if (doctor_id) {
                 $('#e_switch_sched').prop('checked', true).change();
             } else {
                 $('#e_switch_sched').prop('checked', false).change();
+
+                $('#e_day_of_week').val(schedule.day_of_week);
+                $('#e_start_time').val(schedule.start_time);
+                $('#e_end_time').val(schedule.end_time);
+
+                console.log("day of week on edit", $('#e_day_of_week'));
             }
+
+            $('#e_doctor').val(doctor_id);
 
             $.ajax({
               url: 'handles/services/get_doctor_option.php',
@@ -708,10 +712,10 @@ include_once('header.php');
           $(this).prop('selectedIndex', 0);
         });
 
-        var avail_dates = JSON.stringify(editScheduleList);
-        $('#e_avail_dates').val(avail_dates);
+        var service_sched = JSON.stringify(editScheduleList);
+        $('#e_service_sched').val(service_sched);
 
-        console.log('Saved Schedules:', avail_dates);
+        console.log('Saved AHSDUIGASDG SCHEDULES:', service_sched);
       });
 
       // UPDATE SERVICE
@@ -719,18 +723,18 @@ include_once('header.php');
 
         e.preventDefault();
 
-        var avail_dates = JSON.stringify(editScheduleList);
-        $('#e_avail_dates').val(avail_dates);
+        var service_sched = JSON.stringify(editScheduleList);
+        $('#e_service_sched').val(service_sched);
 
         var service_id = $('#e_service_id').val();
         var service_name = $('#e_service_name').val();
         var description = $('#e_description').val();
         var duration = $('#e_duration').val();
         var cost = $('#e_cost').val();
-        var avail_dates = $('#e_avail_dates').val();
+        var service_sched = $('#e_service_sched').val();
         var doctor_id = $('#e_doctor').find(':selected').data('doctor-id');
 
-        if (!avail_dates || avail_dates === '[]') {
+        if (!service_sched || service_sched === '[]') {
           alert('Please Select a Schedule...');
           return;
         }
@@ -747,7 +751,7 @@ include_once('header.php');
           duration: duration,
           cost: cost,
           doctor_id: doctor_id,
-          avail_dates: avail_dates
+          service_sched: service_sched
         }
 
         console.log('click submit', service_data);
