@@ -26,11 +26,11 @@ try {
 
     $doctor_sched = json_decode($_POST['doctor_sched'], true);
 
-    foreach ($doctor_sched as $sched) {
+    foreach ($doctor_sched as $schedule) {
         
-        $day_of_week = $sched['day_of_week'];
-        $start_time = $sched['start_time'];
-        $end_time = $sched['end_time'];
+        $day_of_week = $schedule['day_of_week'];
+        $start_time = $schedule['start_time'];
+        $end_time = $schedule['end_time'];
 
         $sql = "INSERT INTO tbl_DoctorSched (doctor_id, day_of_week, start_time, end_time)
                     VALUES (:doctor_id, :day_of_week, :start_time, :end_time);";

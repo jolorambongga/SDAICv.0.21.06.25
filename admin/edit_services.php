@@ -58,18 +58,22 @@ include_once('header.php');
         <div class="modal fade" id="mod_addServ" tabindex="-1" aria-labelledby="mod_addServLabel" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
+
               <!-- start modal header -->
               <div class="modal-header">
                 <h1 class="modal-title fs-5" id="mod_addServLabel">Add New Service</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
               </div>
               <!-- end modal header -->
+
               <div class="modal-body">
+
                 <!-- start service name -->
                 <label for="service_name" class="form-label">Service Name</label>
                 <input type="text" id="service_name" class="form-control" required>
                 <pre></pre>
                 <!-- end service name -->
+
                 <!-- start service description -->
                 <label for="description" class="form-label">Service Description</label>
                 <textarea type="text" id="description" class="form-control" required></textarea>
@@ -82,6 +86,8 @@ include_once('header.php');
                 </div>
                 <pre></pre>
 
+                <input type="hidden" id="doc_sched" name="doc_sched"/>
+
 
                 <span id="set_sched">
 
@@ -92,6 +98,13 @@ include_once('header.php');
                 <input type="number" id="duration" class="form-control" required>
                 <pre></pre>
                 <!-- end service duration -->
+
+                <!-- service max -->
+                <label for="max" class="form-label">Service Max</label>
+                <input type="number" id="max" class="form-control" required>
+                <pre></pre>
+                <!-- end service max -->
+
                 <!-- service cost -->
                 <label for="cost" class="form-label">Service Cost</label>
                 <div class="input-group mb-3">
@@ -100,18 +113,7 @@ include_once('header.php');
                   <span class="input-group-text bg-warning-">.00</span>
                 </div>
                 <!-- end service cost -->
-                <!-- service doctor -->
-                <label class="form-label">Choose Doctor</label>
-                <div class="input-group mb-3">
-                  <label class="input-group-text bg-warning-" for="doctor">Options</label>
-                  <select class="form-select" id="doctor">
-                    <option selected>Select Doctor...</option>
-                    <option value="1">Doctor 1</option>
-                    <option value="2">Doctor 2</option>
-                    <option value="3">Doctor 3</option>
-                  </select>
-                </div>
-                <!-- end service doctor -->
+
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
@@ -228,17 +230,33 @@ include_once('header.php');
       console.log('ready');
 
       $(document).ready(function() {        
-        var doctor_sched = `SELECT DOCTOR<pre></pre>`;
+        var doctor_sched = `<label class="form-label">Choose Doctor</label>
+                <div class="input-group mb-3">
+                  <label class="input-group-text bg-warning-" for="doctor">Options</label>
+                  <select class="form-select" id="doctor">
+                    <option selected>Select Doctor...</option>
+                    <option value="1">Doctor 1</option>
+                    <option value="2">Doctor 2</option>
+                    <option value="3">Doctor 3</option>
+                  </select>
+                </div>`;
+
         var service_sched = `<button id="callSetSched" type="button" class="btn btn-warning w-100">Set Schedule</button><pre></pre>`;
         $('#set_sched').append(doctor_sched);
+
         $('#switch_sched').on('change', function() {
           if ($('#switch_sched').is(':checked')) {
             $('#set_sched').empty();
             $('#set_sched').append(doctor_sched);
+            $('#doc_sched').val("true");
+            var sched_type = $('#doc_sched').val();
           } else {
             $('#set_sched').empty();
             $('#set_sched').append(service_sched);
+            $('#doc_sched').val("false");
+            var sched_type = $('#doc_sched').val();
           }
+          console.log(sched_type);
         });
       });
 
