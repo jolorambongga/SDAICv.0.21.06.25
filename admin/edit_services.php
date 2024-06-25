@@ -311,46 +311,46 @@ include_once('header.php');
 
       // READ SERVICES
       function loadServices() {
-      $.ajax({
+        $.ajax({
           type: 'GET',
           url: 'handles/services/read_services.php',
           dataType: 'JSON',
           success: function(response) {
-              console.log("SUCCESS READ:", response);
-              $('#tbodyServices').empty();
+            console.log("SUCCESS READ:", response);
+            $('#tbodyServices').empty();
 
-              response.data.forEach(function(data) {
+            response.data.forEach(function(data) {
 
-                  const schedule = data.doctor_id ? data.doctor_sched : data.service_sched;
+              const schedule = data.doctor_id ? data.doctor_sched : data.service_sched;
 
-                  const full_name = data.doctor_id ? data.full_name : '<i>No Doctor Assigned</i>';
+              const full_name = data.doctor_id ? data.full_name : '<i>No Doctor Assigned</i>';
 
-                  const read_service_html = `
-                  <tr>
-                  <th scope="row"><small>${data.service_id}</small></th>
-                  <td><small>${data.service_name}</small></td>
-                  <td><small>${data.description}</small></td>
-                  <td><small>${full_name}</small></td>
-                  <td><small>${schedule}</small></td>
-                  <td><small>${data.duration}</small></td>
-                  <td><small>${data.max}</small></td>
-                  <td><small>${data.cost}</small></td>
-                  <td data-service-id='${data.service_id}' data-doctor-id='${data.doctor_id}' data-service-name='${data.service_name}'>
-                  <div class="d-grid gap-2 d-md-flex justify-content-md-end text-center">
-                  <button id='callEdit' type='button' class='btn btn-mymedium btn-sm' data-bs-toggle='modal' data-bs-target='#mod_editServ'><i class="fas fa-edit"></i></button>
-                  <button id='callDelete' type='button' class='btn btn-myshadow btn-sm' data-bs-toggle='modal' data-bs-target='#mod_delServ'><i class="fas fa-trash"></i></button>
-                  </div>
-                  </td>
-                  </tr>
-                  `;
-                  $('#tbodyServices').append(read_service_html);
+              const read_service_html = `
+              <tr>
+              <th scope="row"><small>${data.service_id}</small></th>
+              <td><small>${data.service_name}</small></td>
+              <td><small>${data.description}</small></td>
+              <td><small>${full_name}</small></td>
+              <td><small>${schedule}</small></td>
+              <td><small>${data.duration}</small></td>
+              <td><small>${data.max}</small></td>
+              <td><small>${data.cost}</small></td>
+              <td data-service-id='${data.service_id}' data-doctor-id='${data.doctor_id}' data-service-name='${data.service_name}'>
+              <div class="d-grid gap-2 d-md-flex justify-content-md-end text-center">
+              <button id='callEdit' type='button' class='btn btn-mymedium btn-sm' data-bs-toggle='modal' data-bs-target='#mod_editServ'><i class="fas fa-edit"></i></button>
+              <button id='callDelete' type='button' class='btn btn-myshadow btn-sm' data-bs-toggle='modal' data-bs-target='#mod_delServ'><i class="fas fa-trash"></i></button>
+              </div>
+              </td>
+              </tr>
+              `;
+              $('#tbodyServices').append(read_service_html);
               }); // END EACH FUNCTION
           },
           error: function(error) {
-              console.log("ERROR READ:", error);
+            console.log("ERROR READ:", error);
           }
-      });
-    }
+        });
+      }
 
       // READ DOCTORS
       function populateDoctorOptions() {
@@ -559,7 +559,7 @@ include_once('header.php');
         $.ajax({
           type: 'GET',
           url: 'handles/services/get_service.php',
-          data: {service_id: service_id, doctor_id: doctor_id},
+          data: { service_id: service_id, doctor_id: doctor_id },
           dataType: 'JSON',
           success: function(response) {
             console.log(response);
@@ -567,56 +567,47 @@ include_once('header.php');
             editScheduleList = [];
 
             response.data.forEach(function(data) {
-
+                // Determine which schedule list to use based on doctor_id presence
               const schedule_list = data.doctor_id ? data.doctor_sched : data.service_sched;
 
-              const schedule = schedule_list[0];
+                // Iterate through each schedule in the schedule list
+              schedule_list.forEach(function(schedule) {
+                const sched_data = `
+                <div class="input-group mx-auto w-100 schedule-item">
+                <span class="input-group-text text-warning">Selected Day:</span>
+                <span class="input-group-text bg-warning-subtle">${schedule.day_of_week}</span>
 
-              const sched_data = `
-              <div class="input-group mx-auto w-100 schedule-item">
+                <span class="input-group-text text-success">Start Time:</span>
+                <span class="input-group-text bg-success-subtle">${schedule.start_time}</span>
 
-              <span class="input-group-text text-warning">Selected Day:</span>
-              <span class="input-group-text bg-warning-subtle">${schedule.day_of_week}</span>
+                <span class="input-group-text text-danger">End Time:</span>
+                <span class="input-group-text bg-danger-subtle">${schedule.end_time}</span>
 
-              <span class="input-group-text text-success">Start Time:</span>
-              <span class="input-group-text bg-success-subtle">${schedule.start_time}</span>
+                <button class="btn btn-danger text-warning remove-sched" type="button" id="removeSched">-</button>
+                </div>
+                `;
+                $('#e_bodySched').append(sched_data);
 
-              <span class="input-group-text text-danger">End Time:</span>
-              <span class="input-group-text bg-danger-subtle">${schedule.end_time}</span>
-
-              <button class="btn btn-danger text-warning remove-sched" type="button" id="removeSched">-</button>
-
-              </div>
-              `;
-              $('#e_bodySched').append(sched_data);
-
-              editScheduleList.push({
-                day_of_week: schedule.day_of_week,
-                start_time: schedule.start_time,
-                end_time: schedule.end_time
+                editScheduleList.push({
+                  day_of_week: schedule.day_of_week,
+                  start_time: schedule.start_time,
+                  end_time: schedule.end_time
+                });
               });
-
-              console.log("EDIT SCHEDULE LIST", editScheduleList);
-              console.log("SCHEDULE", schedule);
-
             });
 
+            // Further processing after appending schedules
             $('#e_service_name').val(response.data[0].service_name);
             $('#e_description').val(response.data[0].description);
             $('#e_duration').val(response.data[0].duration);
             $('#e_max').val(response.data[0].max);
             $('#e_cost').val(response.data[0].cost);
 
+            // Handle UI changes based on doctor_id presence
             if (doctor_id) {
-                $('#e_switch_sched').prop('checked', true).change();
+              $('#e_switch_sched').prop('checked', true).change();
             } else {
-                $('#e_switch_sched').prop('checked', false).change();
-
-                $('#e_day_of_week').val(schedule.day_of_week);
-                $('#e_start_time').val(schedule.start_time);
-                $('#e_end_time').val(schedule.end_time);
-
-                console.log("day of week on edit", $('#e_day_of_week'));
+              $('#e_switch_sched').prop('checked', false).change();
             }
 
             $('#e_doctor').val(doctor_id);
@@ -629,30 +620,31 @@ include_once('header.php');
                 console.log("THE RESPONSE:", response);
 
                 var e_doctor_select = $('#e_doctor');
-                    e_doctor_select.empty();
+                e_doctor_select.empty();
 
-                    response.data.forEach(function(doc) {
-                      const option = `
-                      <option data-doctor-id="${doc.doctor_id}" value="${doc.doctor_id}">
-                      Dr. ${doc.full_name}
-                      </option>`;
-                      e_doctor_select.append(option);
-                    });
-
-                    e_doctor_select.val(doctor_id);
-
-                    console.log("SELECTED DOCTOR ID", doctor_id);
-                  },
-                  error: function(error) {
-                    console.log('Error fetching doctor options:', error);
-                  }
+                response.data.forEach(function(doc) {
+                  const option = `
+                  <option data-doctor-id="${doc.doctor_id}" value="${doc.doctor_id}">
+                  Dr. ${doc.full_name}
+                  </option>`;
+                  e_doctor_select.append(option);
                 });
+
+                e_doctor_select.val(doctor_id);
+
+                console.log("SELECTED DOCTOR ID", doctor_id);
+              },
+              error: function(error) {
+                console.log('Error fetching doctor options:', error);
+              }
+            });
           },
-          error: function(error) {
-            console.log(error);
+          error: function(xhr, status, error) {
+            console.error("Error fetching service data:", error);
           }
-        })
+        });
       });
+
 
       $(document).on('click', '#e_callSetSched', function () {
         new bootstrap.Modal($('#mod_editServSched')).show();
