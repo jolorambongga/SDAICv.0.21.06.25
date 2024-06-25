@@ -7,8 +7,11 @@ try {
 
     $sql = "SELECT d.doctor_id, 
             CONCAT(d.first_name, ' ', d.middle_name, ' ', d.last_name) AS full_name,
-            GROUP_CONCAT(CONCAT(s.day_of_week, ': ', s.start_time, ' - ', s.end_time)
-            ORDER BY s.day_of_week ASC SEPARATOR '<br>') AS schedule,d.contact
+            GROUP_CONCAT(CONCAT(s.day_of_week, ': ', 
+                TIME_FORMAT(s.start_time, '%h:%i %p'), ' - ', 
+                TIME_FORMAT(s.end_time, '%h:%i %p'))
+            ORDER BY s.day_of_week ASC SEPARATOR '<br>') AS schedule,
+            d.contact
             FROM tbl_Doctors AS d
             LEFT JOIN tbl_DoctorSched AS s ON d.doctor_id = s.doctor_id
             GROUP BY d.doctor_id, d.first_name, d.middle_name, d.last_name, d.contact

@@ -10,32 +10,31 @@ try {
 	$user_input = $_POST['user_input'];
 
 	if ($user_input == 'DELETE') {
-		// DOCTOR AVAILABILITY
-		$sql = "DELETE FROM tbl_DoctorAvailability WHERE doctor_id = ?;";
+
+		// $sql = "DELETE FROM tbl_DoctorSched WHERE doctor_id = :doctor_id;";
+
+		// $stmt = $pdo->prepare($sql);
+
+		// $stmt->bindParam('doctor_id', $doctor_id, PDO::PARAM_INT);
+
+		// $stmt->execute();
+
+		$sql = "DELETE FROM tbl_Doctors WHERE doctor_id = :doctor_id;";
 
 		$stmt = $pdo->prepare($sql);
 
-		$stmt->bindParam(1, $doctor_id, PDO::PARAM_STR);
-
-		$stmt->execute();
-
-		// DELETE DOCTOR
-		$sql = "DELETE FROM tbl_Doctors WHERE doctor_id = ?;";
-
-		$stmt = $pdo->prepare($sql);
-
-		$stmt->bindParam(1, $doctor_id, PDO::PARAM_STR);
+		$stmt->bindParam(':doctor_id', $doctor_id, PDO::PARAM_INT);
 
 		$stmt->execute();
 
 		header('Content-Type: application/json');
 
-		echo json_encode(array("status" => "success", "process" => "delete doctor IF", "user input is: " => $user_input));
+		echo json_encode(array("status" => "success", "process" => "delete_doctor_if_statement", "user input is: " => $user_input));
 
 	} else {
-		echo json_encode(array("status" => "sucess", "process" => "delete doctor ELSE", "user input is: " => $user_input));
+		echo json_encode(array("status" => "sucess", "process" => "delete_doctor_else_statement", "user input is: " => $user_input));
 	}
 
 } catch (PDOException $e) {
-	echo json_encode(["status" => "error", "message" => $e->getMessage(), "report" => "del catch reached"]);
+	echo json_encode(array("status" => "error", "message" => $e->getMessage(), "report" => "del catch reached"));
 }

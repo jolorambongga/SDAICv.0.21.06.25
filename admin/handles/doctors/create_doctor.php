@@ -39,8 +39,8 @@ try {
 
         $stmt->bindParam(':doctor_id', $doctor_id, PDO::PARAM_INT);
         $stmt->bindParam(':day_of_week', $day_of_week, PDO::PARAM_STR);
-        $stmt->bindParam(':start_time', $start_time, PDO::PARAM_INT);
-        $stmt->bindParam(':end_time', $end_time, PDO::PARAM_INT);
+        $stmt->bindParam(':start_time', $start_time, PDO::PARAM_STR);
+        $stmt->bindParam(':end_time', $end_time, PDO::PARAM_STR);
 
         $stmt->execute();
     }

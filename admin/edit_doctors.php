@@ -65,8 +65,8 @@ include_once('header.php');
                 <pre></pre>
                 <!-- end doctor name -->
                 <!-- start doctor contact -->
-                <label for="contact" class="form-label">Doctor's Contact</label>
-                <input type="number" id="contact" class="form-control" required>
+                <label for="contact" class="form-label">Doctor's Contact<small>&nbsp;(ex. 09663419521)</small></label>
+                <input maxlength="11" type="text" id="contact" class="form-control" required pattern="09[0-9]{9}">
                 <pre></pre>
                 <!-- end doctor contact -->
                 <!-- start doctor sched -->
