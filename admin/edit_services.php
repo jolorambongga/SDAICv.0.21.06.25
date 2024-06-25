@@ -94,7 +94,7 @@ include_once('header.php');
                 </span>
 
                 <!-- service duration -->
-                <label for="duration" class="form-label">Service Duration</label>
+                <label for="duration" class="form-label">Service Duration&nbsp;<small>(in minutes)</small></label>
                 <input type="number" id="duration" class="form-control" required>
                 <pre></pre>
                 <!-- end service duration -->
@@ -168,7 +168,7 @@ include_once('header.php');
                 </span>
 
                 <!-- service duration -->
-                <label for="e_duration" class="form-label">Service Duration</label>
+                <label for="e_duration" class="form-label">Service Duration&nbsp;<small>(in minutes)</small></label>
                 <input type="number" id="e_duration" class="form-control" required>
                 <pre></pre>
                 <!-- end service duration -->
@@ -730,8 +730,11 @@ include_once('header.php');
 
         e.preventDefault();
 
+        var doc_sched = $('#e_doc_sched').val();
+
         var service_sched = JSON.stringify(editScheduleList);
         $('#e_service_sched').val(service_sched);
+    
 
         var service_id = $('#e_service_id').val();
         var service_name = $('#e_service_name').val();
@@ -744,6 +747,7 @@ include_once('header.php');
 
         if(doc_sched === "false") {
           if (!service_sched || service_sched === '[]') {
+            console.log("reasch if??");
             alert('Please Select a Schedule...');
             return;
           }
@@ -815,7 +819,7 @@ include_once('header.php');
           success: function(response) {
             console.log("DELETE SERVICE RESPONSE:", response);
             loadServices();
-            $('#mod_delServ').modal('hide');
+            closeModal();
           },
           error: function(error) {
             console.log("DELETE SERVICE ERROR:", error);
@@ -836,7 +840,10 @@ include_once('header.php');
         $('#service_name').val('');
         $('#description').val('');
         $('#duration').val('');
+        $('#max').val('');
         $('#cost').val('');
+
+        $('#del_user_input').val('');
 
         $('#doctor').prop('selectedIndex', 0);
         $('#bodySched').empty();

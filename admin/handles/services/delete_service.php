@@ -9,26 +9,29 @@ try {
   $user_input = $_POST['user_input'];
 
   if ($user_input == 'DELETE') {
-    $pdo->beginTransaction();
 
-    $sql = "DELETE FROM tbl_ServiceAvailability WHERE service_id = ?;";
+    $sql = "DELETE FROM tbl_ServiceSched WHERE service_id = :service_id;";
+
     $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(1, $service_id, PDO::PARAM_STR);
+
+    $stmt->bindParam(':service_id', $service_id, PDO::PARAM_STR);
+
     $stmt->execute();
 
-    $sql = "DELETE FROM tbl_Services WHERE service_id = ?;";
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(1, $service_id, PDO::PARAM_STR);
-    $stmt->execute();
+    $sql = "DELETE FROM tbl_Services WHERE service_id = :service_id;";
 
-    $pdo->commit();
+    $stmt = $pdo->prepare($sql);
+
+    $stmt->bindParam('service_id', $service_id, PDO::PARAM_STR);
+
+    $stmt->execute();
 
     header('Content-Type: application/json');
-    echo json_encode(array("status" => "success", "process" => "delete service IF", "user input is" => $user_input));
+    echo json_encode(array("status" => "success", "process" => "delete_service_and_sched_IF", "user_input" => $user_input));
   } else {
-    echo json_encode(array("status" => "error", "process" => "delete service ELSE", "user input is" => $user_input));
+    echo json_encode(array("status" => "error", "process" => "delete_service_and_sched_ELSE", "user_input" => $user_input));
   }
 } catch (PDOException $e) {
   $pdo->rollBack();
-  echo json_encode(["status" => "error", "message" => $e->getMessage(), "report" => "del catch reached"]);
+  echo json_encode(array("status" => "error", "message" => $e->getMessage(), "report" => "catch_reached", "process" => "delete_service_and_sched"));
 }
