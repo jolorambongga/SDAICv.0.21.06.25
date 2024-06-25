@@ -319,12 +319,14 @@ include_once('header.php');
 
                   const schedule = data.doctor_id ? data.doctor_sched : data.service_sched;
 
+                  const full_name = data.doctor_id ? data.full_name : '<i>No Doctor Assigned</i>';
+
                   const read_service_html = `
                   <tr>
                   <th scope="row"><small>${data.service_id}</small></th>
                   <td><small>${data.service_name}</small></td>
                   <td><small>${data.description}</small></td>
-                  <td><small>${data.full_name}</small></td>
+                  <td><small>${full_name}</small></td>
                   <td><small>${schedule}</small></td>
                   <td><small>${data.duration}</small></td>
                   <td><small>${data.max}</small></td>
@@ -432,6 +434,10 @@ include_once('header.php');
         `
 
         $('#bodySched').append(sched_data);
+
+        $(document).on('click', '#addSched', function() {
+          $('#mod_addServSched select').prop('selectedIndex', 0);
+        });
 
         scheduleList.push({
           day_of_week: day_of_week,
@@ -678,6 +684,11 @@ include_once('header.php');
 
         $('#e_bodySched').append(sched_data);
 
+        // RESECT SCHEDULE OPTION
+        $('#mod_editServSched select').each(function() {
+          $(this).prop('selectedIndex', 0);
+        });
+
         editScheduleList.push({
           day_of_week: day_of_week,
           start_time: start_time,
@@ -707,6 +718,7 @@ include_once('header.php');
       // SAVE EDITED SCHEDULE
       $('#e_btnSaveSched').click(function () {
         $('#mod_editServSched').modal('hide');
+        // RESECT SCHEDULE OPTION
         $('#mod_editServSched select').each(function() {
           $(this).prop('selectedIndex', 0);
         });
