@@ -33,13 +33,13 @@ include_once('header.php');
             <thead>
               <tr>
                 <th scope="col">#</th>
-                <th scope="col">Service Name</th>
+                <th scope="col">Service</th>
                 <th scope="col">Description</th>
-                <th scope="col">Available Day</th>
-                <th scope="col">Available Time</th>
-                <th scope="col">Duration</th>
-                <th scope="col">Cost</th>
                 <th scope="col">Doctor</th>
+                <th scope="col">Schedule</th>
+                <th scope="col">Duration</th>
+                <th scope="col">Max</th>
+                <th scope="col">Cost</th>
                 <th scope="col">Action</th>
               </tr>
             </thead>
@@ -76,9 +76,16 @@ include_once('header.php');
                 <pre></pre>
                 <!-- end service description -->
                 
-                <!-- start doctor sched -->
-                <button id="callSetSched" type="button" class="btn btn-warning w-100">Set Schedule</button><pre></pre>
-                <!-- end doctor sched -->
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" role="switch" id="switch_sched" checked>
+                  <label class="form-check-label" for="switch_sched">Use doctor sched</label>
+                </div>
+                <pre></pre>
+
+
+                <span id="set_sched">
+
+                </span>
 
                 <!-- service duration -->
                 <label for="duration" class="form-label">Service Duration</label>
@@ -219,6 +226,22 @@ include_once('header.php');
   <script>
     $(document).ready(function () {
       console.log('ready');
+
+      $(document).ready(function() {        
+        var doctor_sched = `SELECT DOCTOR<pre></pre>`;
+        var service_sched = `<button id="callSetSched" type="button" class="btn btn-warning w-100">Set Schedule</button><pre></pre>`;
+        $('#set_sched').append(doctor_sched);
+        $('#switch_sched').on('change', function() {
+          if ($('#switch_sched').is(':checked')) {
+            $('#set_sched').empty();
+            $('#set_sched').append(doctor_sched);
+          } else {
+            $('#set_sched').empty();
+            $('#set_sched').append(service_sched);
+          }
+        });
+      });
+
       loadServices();
 
       var scheduleList = [];
@@ -303,7 +326,7 @@ include_once('header.php');
         populateDoctorOptions();
       });
 
-      $('#callSetSched').click(function () {
+      $(document).on('click', '#callSetSched', function () {
         new bootstrap.Modal($('#mod_addServSched')).show();
       });
 
