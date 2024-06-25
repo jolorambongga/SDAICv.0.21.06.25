@@ -8,7 +8,7 @@
       </div>
       <div class="modal-body">
 
-        <input type="hidden" id="e_service_schedule" name="e_service_schedule">
+        <input type="hidden" id="e_service_sched" name="e_service_sched">
         <input type="hidden" id="e_service_id" name="e_service_id">
 
         <pre></pre>

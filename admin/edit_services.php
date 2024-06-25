@@ -619,7 +619,7 @@ include_once('header.php');
                 console.log("THE RESPONSE:", response);
 
                 var e_doctor_select = $('#e_doctor');
-                    e_doctor_select.empty(); // Clear existing options
+                    e_doctor_select.empty();
 
                     response.data.forEach(function(doc) {
                       const option = `
@@ -629,7 +629,6 @@ include_once('header.php');
                       e_doctor_select.append(option);
                     });
 
-                    // Set the selected doctor based on the doctor_id
                     e_doctor_select.val(doctor_id);
 
                     console.log("SELECTED DOCTOR ID", doctor_id);
@@ -734,14 +733,18 @@ include_once('header.php');
         var service_sched = $('#e_service_sched').val();
         var doctor_id = $('#e_doctor').find(':selected').data('doctor-id');
 
-        if (!service_sched || service_sched === '[]') {
-          alert('Please Select a Schedule...');
-          return;
+        if(doc_sched === "false") {
+          if (!service_sched || service_sched === '[]') {
+            alert('Please Select a Schedule...');
+            return;
+          }
         }
 
-        if(!doctor_id) {
-          alert("Please Select a Doctor...");
-          return;
+        if(doc_sched === "true") {
+          if(!doctor_id) {
+            alert("Please Select a Doctor...");
+            return;
+          }
         }
 
         var service_data = {
