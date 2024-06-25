@@ -234,6 +234,10 @@ include_once('header.php');
     $(document).ready(function () {
       console.log('ready');
 
+      $(document).on('hidden', '#mod_addServLabel', function() {
+
+      });
+
       $(document).ready(function() {        
         var doctor_sched = `<label class="form-label">Choose Doctor</label>
         <div class="input-group mb-3">
@@ -741,6 +745,7 @@ include_once('header.php');
         var service_name = $('#e_service_name').val();
         var description = $('#e_description').val();
         var duration = $('#e_duration').val();
+        var max = $('#e_max').val();
         var cost = $('#e_cost').val();
         var service_sched = $('#e_service_sched').val();
         var doctor_id = $('#e_doctor').find(':selected').data('doctor-id');
@@ -764,6 +769,7 @@ include_once('header.php');
           service_name: service_name,
           description: description,
           duration: duration,
+          max: max,
           cost: cost,
           doctor_id: doctor_id,
           service_sched: service_sched
@@ -843,6 +849,7 @@ include_once('header.php');
         $('#doctor').prop('selectedIndex', 0);
         $('#bodySched').empty();
         scheduleList = [];
+        editScheduleList = [];
       } // END CLEAR FIELDS FUNCTION
 
       // ON CLOSE MODAL
@@ -850,6 +857,7 @@ include_once('header.php');
         $('#mod_addServSched select').each(function() {
           $(this).prop('selectedIndex', 0);
         });
+        scheduleList = [];
       });
 
       $('#mod_addServ').on('hidden.bs.modal', function () {
