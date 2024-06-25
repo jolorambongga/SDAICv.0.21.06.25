@@ -37,8 +37,8 @@ include_once('header.php');
                 <th scope="col">Description</th>
                 <th scope="col">Doctor</th>
                 <th scope="col">Schedule</th>
-                <th scope="col">Duration</th>
-                <th scope="col">Max</th>
+                <th scope="col">Duration (mins)</th>
+                <th scope="col">Max (/patient)</th>
                 <th scope="col">Cost</th>
                 <th scope="col">Action</th>
               </tr>
@@ -319,32 +319,40 @@ include_once('header.php');
             console.log("SUCCESS READ:", response);
             $('#tbodyServices').empty();
 
-            response.data.forEach(function(data) {
+            if (response.data.length === 0) {
 
-              const schedule = data.doctor_id ? data.doctor_sched : data.service_sched;
-
-              const full_name = data.doctor_id ? data.full_name : '<i>No Doctor Assigned</i>';
-
-              const read_service_html = `
+              const noDataHtml = `
               <tr>
-              <th scope="row"><small>${data.service_id}</small></th>
-              <td><small>${data.service_name}</small></td>
-              <td><small>${data.description}</small></td>
-              <td><small>${full_name}</small></td>
-              <td><small>${schedule}</small></td>
-              <td><small>${data.duration}</small></td>
-              <td><small>${data.max}</small></td>
-              <td><small>${data.cost}</small></td>
-              <td data-service-id='${data.service_id}' data-doctor-id='${data.doctor_id}' data-service-name='${data.service_name}'>
-              <div class="d-grid gap-2 d-md-flex justify-content-md-end text-center">
-              <button id='callEdit' type='button' class='btn btn-mymedium btn-sm' data-bs-toggle='modal' data-bs-target='#mod_editServ'><i class="fas fa-edit"></i></button>
-              <button id='callDelete' type='button' class='btn btn-myshadow btn-sm' data-bs-toggle='modal' data-bs-target='#mod_delServ'><i class="fas fa-trash"></i></button>
-              </div>
-              </td>
+                <td colspan="9" class="text-center"><i>No data available</i></td>
               </tr>
               `;
-              $('#tbodyServices').append(read_service_html);
-              }); // END EACH FUNCTION
+              $('#tbodyServices').append(noDataHtml);
+            } else {
+              response.data.forEach(function(data) {
+                const schedule = data.doctor_id ? data.doctor_sched : data.service_sched;
+                const full_name = data.doctor_id ? data.full_name : '<i>No Doctor Assigned</i>';
+
+                const read_service_html = `
+                <tr>
+                <th scope="row"><small>${data.service_id}</small></th>
+                <td><small>${data.service_name}</small></td>
+                <td><small>${data.description}</small></td>
+                <td><small>${full_name}</small></td>
+                <td><small>${schedule}</small></td>
+                <td><small>${data.duration}</small></td>
+                <td><small>${data.max}</small></td>
+                <td><small>${data.cost}</small></td>
+                <td data-service-id='${data.service_id}' data-doctor-id='${data.doctor_id}' data-service-name='${data.service_name}'>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end text-center">
+                <button id='callEdit' type='button' class='btn btn-mymedium btn-sm' data-bs-toggle='modal' data-bs-target='#mod_editServ'><i class="fas fa-edit"></i></button>
+                <button id='callDelete' type='button' class='btn btn-myshadow btn-sm' data-bs-toggle='modal' data-bs-target='#mod_delServ'><i class="fas fa-trash"></i></button>
+                </div>
+                </td>
+                </tr>
+                `;
+                $('#tbodyServices').append(read_service_html);
+              });
+            }
           },
           error: function(error) {
             console.log("ERROR READ:", error);
@@ -734,7 +742,7 @@ include_once('header.php');
 
         var service_sched = JSON.stringify(editScheduleList);
         $('#e_service_sched').val(service_sched);
-    
+
 
         var service_id = $('#e_service_id').val();
         var service_name = $('#e_service_name').val();

@@ -17,29 +17,40 @@
           console.log(response);
           $('#tbodyDoctors').empty();
 
-          response.doctor_data.forEach(function(data) {
-            const read_doctor_html = `
+          if (response.doctor_data.length === 0) {
+        // If no data is available, show "No data available" message
+            const noDataHtml = `
             <tr>
-            <th scope="row"><small>${data.doctor_id}</small></th>
-            <td><small>${data.full_name}</small></td>
-            <td><small>${data.schedule}</small></td>
-            <td><small>${data.contact}</small></td>
-            <td data-doctor-id='${data.doctor_id}'>
-            <div class="d-grid gap-2 d-md-flex justify-content-md-end text-center">
-            <button id='callEdit' type='button' class='btn btn-mymedium btn-sm' data-bs-toggle='modal' data-bs-target='#mod_editDoc'><i class="fas fa-edit"></i></button>
-            <button id='callDelete' type='button' class='btn btn-myshadow btn-sm' data-bs-toggle='modal' data-bs-target='#mod_delDoc'><i class="fas fa-trash"></i></button>
-            </div>
-            </td>
+            <td colspan="5" class="text-center"><i>No data available</i></td>
             </tr>
             `;
-            $('#tbodyDoctors').append(read_doctor_html);
-            }); // END EACH FUNCTION
+            $('#tbodyDoctors').append(noDataHtml);
+          } else {
+            response.doctor_data.forEach(function(data) {
+              const read_doctor_html = `
+              <tr>
+              <th scope="row"><small>${data.doctor_id}</small></th>
+              <td><small>${data.full_name}</small></td>
+              <td><small>${data.schedule}</small></td>
+              <td><small>${data.contact}</small></td>
+              <td data-doctor-id='${data.doctor_id}'>
+              <div class="d-grid gap-2 d-md-flex justify-content-md-end text-center">
+              <button id='callEdit' type='button' class='btn btn-mymedium btn-sm' data-bs-toggle='modal' data-bs-target='#mod_editDoc'><i class="fas fa-edit"></i></button>
+              <button id='callDelete' type='button' class='btn btn-myshadow btn-sm' data-bs-toggle='modal' data-bs-target='#mod_delDoc'><i class="fas fa-trash"></i></button>
+              </div>
+              </td>
+              </tr>
+              `;
+              $('#tbodyDoctors').append(read_doctor_html);
+            });
+          }
         },
         error: function(error) {
           console.log("READ DOCTOR ERROR:", error);
         }
       });
     }
+
 
 
       // START DELETE DOCTOR
@@ -312,6 +323,10 @@
 
       $('#e_bodySched').append(sched_data);
 
+      $('#mod_editDocSched select').each(function() {
+        $(this).prop('selectedIndex', 0);
+      });
+
       editScheduleList.push({
         day_of_week: day_of_week,
         start_time: start_time,
@@ -405,6 +420,10 @@
 
       new bootstrap.Modal($('#mod_editDocSched')).show();
 
+      $('#mod_editDocSched select').each(function() {
+        $(this).prop('selectedIndex', 0);
+      });
+
     });
 
 
@@ -424,6 +443,18 @@
         $('#middle_name').val('');
         $('#last_name').val('');
         $('#contact').val('');
+
+        $('#mod_addDocSched select').each(function() {
+          $(this).prop('selectedIndex', 0);
+        });
+
+        scheduleList = [];
+
+        $('#mod_editDocSched select').each(function() {
+          $(this).prop('selectedIndex', 0);
+        });
+
+        editScheduleList = [];
 
         $('#del_user_input').val('');
       } // END CLEAR FIELDS FUNCTION
