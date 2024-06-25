@@ -32,10 +32,10 @@ try {
         $start_time = $sched['start_time'];
         $end_time = $sched['end_time'];
 
-        $query = "INSERT INTO tbl_DoctorSched (doctor_id, day_of_week, start_time, end_time)
+        $sql = "INSERT INTO tbl_DoctorSched (doctor_id, day_of_week, start_time, end_time)
                     VALUES (:doctor_id, :day_of_week, :start_time, :end_time);";
 
-        $stmt = $pdo->prepare($query);
+        $stmt = $pdo->prepare($sql);
 
         $stmt->bindParam(':doctor_id', $doctor_id, PDO::PARAM_INT);
         $stmt->bindParam(':day_of_week', $day_of_week, PDO::PARAM_STR);
@@ -45,13 +45,14 @@ try {
         $stmt->execute();
     }
 
+    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     header('Content-Type: application/json');
-    echo json_encode(array("status" => "success", "process" => "add_doctor_and_sched", "doctor_sched" => $doctor_sched));
+    echo json_encode(array("status" => "success", "process" => "create_doctor_and_sched", "doctor_sched" => $doctor_sched, "doctor_data" => $data));
 
 } catch (PDOException $e) {
 
     header('Content-Type: application/json');
-    echo json_encode(array("status" => "error", "message" => $e->getMessage(), "process" => "add_doctor_and_sched", "doctor_sched" => $doctor_sched));
+    echo json_encode(array("status" => "error", "message" => $e->getMessage(), "process" => "add_doctor_and_sched", "doctor_sched" => $doctor_sched, "report" => "catch_reached"));
 
 }

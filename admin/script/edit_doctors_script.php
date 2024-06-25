@@ -220,9 +220,9 @@
       // EDIT DOCTOR
       $('#tbodyDoctors').on('click', '#callEdit', function () {
         var doctor_id = $(this).closest("td").data('doctor-id');
-        var doctor_avail_id = $(this).closest("td").data('doctor-avail-id');
+        var doctor_sched_id = $(this).closest("td").data('doctor-sched-id');
         console.log("doctor id on edit click:", doctor_id);
-        console.log("doctor avail id on edit click:", doctor_avail_id);
+        console.log("doctor sched id on edit click:", doctor_sched_id);
 
         $('#e_doctor_id').val(doctor_id);
 
@@ -231,7 +231,7 @@
         $.ajax({
           type: 'GET',
           url: 'handles/doctors/get_doctor.php',
-          data: { doctor_id: doctor_id, doctor_avail_id: doctor_avail_id },
+          data: { doctor_id: doctor_id, doctor_sched_id: doctor_sched_id },
           dataType: 'JSON',
           success: function(response) {
             console.log("get doctor success function:", response);
@@ -244,13 +244,13 @@
               <div class="input-group mx-auto w-100 schedule-item">
 
               <span class="input-group-text text-warning">Selected Day:</span>
-              <span class="input-group-text bg-warning-subtle">${schedule.avail_date}</span>
+              <span class="input-group-text bg-warning-subtle">${schedule.day_of_week}</span>
 
               <span class="input-group-text text-success">Start Time:</span>
-              <span class="input-group-text bg-success-subtle">${schedule.avail_start_time}</span>
+              <span class="input-group-text bg-success-subtle">${schedule.start_time}</span>
 
               <span class="input-group-text text-danger">End Time:</span>
-              <span class="input-group-text bg-danger-subtle">${schedule.avail_end_time}</span>
+              <span class="input-group-text bg-danger-subtle">${schedule.end_time}</span>
 
               <button class="btn btn-danger text-warning remove-sched" type="button" id="removeSched">-</button>
 
@@ -259,9 +259,9 @@
               $('#e_bodySched').append(sched_data);
 
               editScheduleList.push({
-                avail_day: schedule.avail_date,
-                avail_start_time: schedule.avail_start_time,
-                avail_end_time: schedule.avail_end_time
+                day_of_week: schedule.day_of_week,
+                start_time: schedule.start_time,
+                end_time: schedule.end_time
               });
 
             });
@@ -270,9 +270,9 @@
             $('#e_middle_name').val(response.data[0].middle_name);
             $('#e_last_name').val(response.data[0].last_name);
             $('#e_contact').val(response.data[0].contact);
-            $('#e_avail_day').val(response.data[0].avail_day);
-            $('#e_avail_start_time').val(response.data[0].avail_start_time);
-            $('#e_avail_end_time').val(response.data[0].avail_end_time);
+            $('#e_day_of_week').val(response.data[0].day_of_week);
+            $('#e_start_time').val(response.data[0].start_time);
+            $('#e_end_time').val(response.data[0].end_time);
             // $('#mod_editDocSched').modal('show');
 
             console.log('grabbed schedule list', editScheduleList);
@@ -285,11 +285,11 @@
 
       // SAVE EDITED SCHEDULE
       $('#e_addSched').click(function () {
-        var avail_day = $('#e_avail_day').val();
-        var avail_start_time = $('#e_avail_start_time').val();
-        var avail_end_time = $('#e_avail_end_time').val();
+        var day_of_week = $('#e_day_of_week').val();
+        var start_time = $('#e_start_time').val();
+        var end_time = $('#e_end_time').val();
 
-        if (!avail_day || !avail_start_time || !avail_end_time) {
+        if (!day_of_week || !start_time || !start_time) {
           alert('Please complete the schedule details.');
           return;
         }
@@ -298,13 +298,13 @@
         <div class="input-group mx-auto w-100 schedule-item">
 
         <span class="input-group-text text-warning">Selected Day:</span>
-        <span class="input-group-text bg-warning-subtle">${avail_day}</span>
+        <span class="input-group-text bg-warning-subtle">${day_of_week}</span>
 
         <span class="input-group-text text-success">Start Time:</span>
-        <span class="input-group-text bg-success-subtle">${avail_start_time}</span>
+        <span class="input-group-text bg-success-subtle">${start_time}</span>
 
         <span class="input-group-text text-danger">End Time:</span>
-        <span class="input-group-text bg-danger-subtle">${avail_end_time}</span>
+        <span class="input-group-text bg-danger-subtle">${end_time}</span>
 
         <button class="btn btn-danger text-warning remove-sched" type="button" id="removeSched">-</button>
 
@@ -314,9 +314,9 @@
         $('#e_bodySched').append(sched_data);
 
         editScheduleList.push({
-          avail_day: avail_day,
-          avail_start_time: avail_start_time,
-          avail_end_time: avail_end_time
+          day_of_week: day_of_week,
+          start_time: start_time,
+          end_time: end_time
         });
 
         console.log(editScheduleList);
@@ -346,10 +346,10 @@
           $(this).prop('selectedIndex', 0);
         });
 
-        var avail_dates = JSON.stringify(editScheduleList);
-        $('#e_avail_dates').val(avail_dates);
+        var doctor_sched = JSON.stringify(editScheduleList);
+        $('#e_doctor_sched').val(doctor_sched);
 
-        console.log('Saved Schedules:', avail_dates);
+        console.log('Saved Schedules:', doctor_sched);
       });
 
       // UPDATE DOCTOR
@@ -357,17 +357,17 @@
 
         e.preventDefault();
 
-        var avail_dates = JSON.stringify(editScheduleList);
-        $('#e_avail_dates').val(avail_dates);
+        var doctor_sched = JSON.stringify(editScheduleList);
+        $('#e_doctor_sched').val(doctor_sched);
 
         var doctor_id = $('#e_doctor_id').val(); // Assuming you have a hidden input for doctor_id in the modal
         var first_name = $('#e_first_name').val();
         var middle_name = $('#e_middle_name').val();
         var last_name = $('#e_last_name').val();
         var contact = $('#e_contact').val();
-        var avail_dates = $('#e_avail_dates').val();
+        var doctor_sched = $('#e_doctor_sched').val();
 
-        if (!avail_dates || avail_dates === '[]') {
+        if (!doctor_sched || doctor_sched === '[]') {
           alert('PLEASE COMPLETE SCHEDULE');
           return;
         }
@@ -378,7 +378,7 @@
           middle_name: middle_name,
           last_name: last_name,
           contact: contact,
-          avail_dates: avail_dates
+          doctor_sched: doctor_sched
         };
 
         console.log('click submit', doctor_data);

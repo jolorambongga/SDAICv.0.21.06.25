@@ -9,7 +9,7 @@ try {
 	$doctor_id = $_GET['doctor_id'];
 
 	$sql = "SELECT * FROM tbl_Doctors AS d
-			LEFT JOIN tbl_DoctorAvailability AS a
+			LEFT JOIN tbl_DoctorSched AS a
 			ON d.doctor_id = a.doctor_id
 			WHERE d.doctor_id = $doctor_id;";
 
@@ -19,9 +19,9 @@ try {
 
 	header('Content-Type: application/json');
 
-	echo json_encode(array("status" => "success", "process" => "get doctor", "data" => $doctor));
+	echo json_encode(array("status" => "success", "process" => "get_doctor", "data" => $doctor));
 
 
 } catch (PDOException $e) {
-	echo json_encode(["status" => "error", "message" => $e->getMessage(), "report" => "catch reached"]);
+	echo json_encode(array("status" => "error", "message" => $e->getMessage(), "process" => "get_doctor", "report" => "catch_reached"));
 }

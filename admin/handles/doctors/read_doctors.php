@@ -30,7 +30,7 @@ try {
     }
 
 } catch (PDOException $e) {
-    echo json_encode(array("status" => "error", "message" => $e->getMessage(), "report" => "catch reached", "process" => "read_doctors"));
+    echo json_encode(array("status" => "error", "message" => $e->getMessage(), "process" => "read_doctors", "report" => "catch_reached"));
 }
 
 ?>
